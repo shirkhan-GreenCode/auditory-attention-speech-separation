@@ -1,6 +1,6 @@
 # Auditory Attention Modeling & Speech Separation
 
-![Project Cover](assets/cover.png)
+![Project Cover](auditory-attention-speech-separation/assets/cover.png)
 
 A biologically inspired spectro-temporal framework for modeling auditory attention and separating concurrent speech signals (the cocktail party problem).
 
@@ -69,3 +69,8 @@ The LaTeX source is available in `paper/main.tex`, and a compiled PDF is provide
 ## Supervisors
 
 - Dr. Farbod Rezazi
+- Dr. Mohammad Hassan Ghasemian Yazdi
+
+## Contact
+
+r.shirkhan@gmail.com
