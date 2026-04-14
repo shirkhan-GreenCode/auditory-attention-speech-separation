@@ -1,0 +1,6 @@
+function test
+f='fff'
+for i=1:10
+        disp(i,'f') 
+    end
+end

@@ -1,0 +1,234 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{balance}
+
+\title{A Spectro-Temporal Framework for Auditory Attention Modeling and Multi-Speaker Speech Separation}
+
+\author{
+	\IEEEauthorblockN{Mohammad Reza Shirkhan}
+	\IEEEauthorblockA{
+		Department of Electrical Engineering\\
+		Islamic Azad University, Tehran, Iran\\
+		Email: r.shirkhan@gmail.com}
+	
+	\and
+	
+	\IEEEauthorblockN{Farbod Rezazi}
+	\IEEEauthorblockA{
+		Department of Electrical Engineering\\
+		Islamic Azad University, Tehran, Iran}
+	
+	\and
+	
+	\IEEEauthorblockN{Mohammad Hassan Ghasemian Yazdi}
+	\IEEEauthorblockA{
+		Department of Electrical Engineering\\
+		Islamic Azad University, Tehran, Iran}
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Selective auditory attention enables humans to follow a target speaker in acoustically complex scenes while suppressing interfering sources. This work presents a biologically inspired computational framework that models auditory attention in a multi-speaker environment using harmonic analysis and multi-resolution spectro-temporal representations. The proposed pipeline begins with spectrogram estimation, enhances voiced structures through harmonic-pattern analysis, maps the signal into a high-dimensional spectro-temporal space, and then reduces this representation using centroid-based features extracted across frequency, scale, and harmonicity dimensions. K-means clustering and temporal tracking are subsequently used to separate concurrent speech streams and reconstruct individual speakers. Experimental results on mixed male--female speech show that the proposed approach improves perceptual quality over a baseline spectrogram-only method, with the best performance obtained for intermediate frame durations. The study demonstrates that spectro-temporal analysis offers an effective and interpretable framework for attention-driven speech separation.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Auditory attention, spectro-temporal analysis, speech separation, harmonicity, K-means clustering, cocktail party problem.
+\end{IEEEkeywords}
+
+\section{Introduction}
+Human listeners routinely solve the cocktail party problem, namely, focusing on one speaker while other competing voices and environmental sounds are simultaneously present. This capability is usually explained through auditory scene analysis, grouping cues, and selective attention mechanisms that jointly organize acoustic components into coherent streams. In practical signal-processing systems, however, the same task remains difficult because speech sources overlap in both time and frequency and vary rapidly over time.
+
+Conventional approaches to speech separation often rely on time-frequency masking, statistical source models, or machine-learning strategies. While these methods can be effective, they may not explicitly preserve the interpretable structure of auditory grouping cues such as harmonicity, spectral continuity, and temporal coherence. In contrast, spectro-temporal representations motivated by cortical auditory processing provide a natural framework for encoding both spectral detail and temporal modulation structure.
+
+This paper reformulates a master's thesis project on auditory attention modeling into an IEEE-style article. The main contribution is a complete processing chain that combines harmonicity-based enhancement with multi-resolution spectro-temporal features and clustering-based stream tracking. The framework is intentionally interpretable and biologically motivated rather than purely data-driven. The resulting system is suitable both as a research prototype and as a basis for future hybrid systems that combine cortical-inspired features with neural architectures.
+
+The main contributions of this work are as follows:
+\begin{itemize}
+    \item a harmonicity-aware front-end for emphasizing voiced speech components in mixed signals;
+    \item a spectro-temporal representation that jointly captures frequency, time, modulation rate, and scale information;
+    \item a centroid-based dimensionality reduction strategy for lowering the computational burden of multi-dimensional auditory features;
+    \item a clustering and temporal-tracking stage for assigning features to competing speakers and reconstructing their speech streams.
+\end{itemize}
+
+\section{Related Work}
+Auditory scene analysis has been studied extensively in both perceptual and computational settings. Bregman formalized the perceptual organization of acoustic scenes and introduced key grouping principles such as harmonicity, onset synchrony, and continuity. Computational auditory scene analysis later translated these ideas into algorithmic frameworks for source grouping and separation. In parallel, cortical spectro-temporal representations were proposed to model how the auditory system encodes complex sounds through modulation-selective filters.
+
+Speech-separation research has also explored sinusoidal grouping, pitch-based segregation, non-negative matrix factorization, probabilistic source models, and, more recently, deep neural networks. Although modern deep models often deliver strong performance, biologically motivated systems remain valuable for three reasons. First, they are highly interpretable. Second, they make the role of grouping cues explicit. Third, they can be used as low-data front-ends or diagnostic baselines for more advanced systems.
+
+The present work is most closely aligned with cortical-inspired spectro-temporal analysis and harmonicity-driven grouping. Its novelty lies in combining these two ideas with explicit dimensionality reduction and frame-wise cluster tracking to approximate an attention-like separation process in a compact and understandable pipeline.
+
+\section{Proposed Method}
+\subsection{System Overview}
+The overall structure of the proposed attention model is shown in Fig.~\ref{fig:system}. The pipeline starts from a mixed speech waveform and produces two reconstructed outputs corresponding to the dominant concurrent speakers. The processing stages are spectrogram estimation, harmonic enhancement, spectro-temporal decomposition, feature reduction, clustering, temporal tracking, and reconstruction.
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=0.46\textwidth]{images/image41.png}
+    \caption{Overall architecture of the proposed auditory attention and speech-separation framework.}
+    \label{fig:system}
+\end{figure}
+
+\subsection{Spectrogram Estimation}
+The input waveform $x[n]$ is first transformed using the short-time Fourier transform (STFT):
+\begin{equation}
+X(t,f)=\sum_n x[n]w[n-t]e^{-j2\pi fn},
+\end{equation}
+where $w[\cdot]$ is the analysis window, $t$ is the frame index, and $f$ is frequency. Different frame lengths were evaluated because they control the time-frequency trade-off. Short frames yield better temporal resolution, whereas longer frames preserve harmonic detail more effectively.
+
+Figure~\ref{fig:spec_examples} shows representative spectrogram examples extracted from the thesis figures. These examples illustrate the structure of the mixed speech signal and the dependence of visible detail on frame configuration.
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=0.32\textwidth]{images/image31.png}\\[2mm]
+    \includegraphics[width=0.32\textwidth]{images/image32.png}
+    \caption{Representative spectrogram examples used in the analysis pipeline.}
+    \label{fig:spec_examples}
+\end{figure}
+
+\subsection{Harmonic Analysis}
+Voiced speech contains harmonic structures that provide an important cue for grouping components belonging to the same speaker. To exploit this property, the system constructs harmonic templates aligned with pitch-related frequency patterns and applies them to the spectrogram. This enhances frequency bins that are likely to belong to voiced speech while suppressing less structured interference.
+
+The harmonic-pattern generation stage is illustrated in Fig.~\ref{fig:harmonic}. The proposed method uses this stage as an intermediate representation before cortical-style spectro-temporal analysis.
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=0.32\textwidth]{images/image37.png}\\[2mm]
+    \includegraphics[width=0.32\textwidth]{images/image39.png}
+    \caption{Examples of harmonic analysis and harmonic-pattern extraction used for emphasizing voiced components.}
+    \label{fig:harmonic}
+\end{figure}
+
+\subsection{Spectro-Temporal Representation}
+After harmonic enhancement, the signal is mapped into a multi-resolution spectro-temporal representation using modulation-selective filters:
+\begin{equation}
+S(t,f,r,s)=X(t,f) * G_{r,s}(t,f),
+\end{equation}
+where $G_{r,s}$ denotes a two-dimensional filter tuned to temporal rate $r$ and spectral scale $s$. The resulting representation adds two dimensions to the conventional time-frequency map. This allows the system to capture slow and fast temporal modulations together with narrow and broad spectral structures.
+
+Examples of spectro-temporal processing stages are shown in Fig.~\ref{fig:strf}. These images illustrate how the representation evolves from the input spectrogram to cortical-style modulation analysis.
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=0.32\textwidth]{images/image42.png}\\[2mm]
+    \includegraphics[width=0.32\textwidth]{images/image43.png}
+    \caption{Spectro-temporal analysis examples showing modulation-based processing of the harmonic-enhanced representation.}
+    \label{fig:strf}
+\end{figure}
+
+\subsection{Feature Reduction}
+Because the full spectro-temporal representation is high-dimensional, a reduction stage is introduced to make clustering tractable. For each frame and each relevant modulation-rate slice, a centroid is computed over the frequency--scale--harmonicity space:
+\begin{equation}
+\mathbf{c}_t=\frac{1}{N_t}\sum_{i=1}^{N_t}[f_i\; s_i\; h_i]^T.
+\end{equation}
+This centroid preserves the dominant location of energy and harmonic structure while substantially reducing the number of variables that must be clustered. The design objective is not merely compression, but preserving speaker-discriminative geometry in a lower-dimensional space.
+
+\subsection{Clustering and Temporal Tracking}
+The reduced feature vectors are grouped using K-means clustering. For $K=2$ speakers, the algorithm minimizes
+\begin{equation}
+J=\sum_{k=1}^{K}\sum_{\mathbf{x}_i\in C_k}\|\mathbf{x}_i-\boldsymbol{\mu}_k\|_2^2,
+\end{equation}
+where $\boldsymbol{\mu}_k$ is the centroid of cluster $C_k$. Cluster identities across adjacent frames are then linked using nearest-centroid continuity rules, allowing the system to maintain a stable stream assignment over time. Figure~\ref{fig:clustering} shows examples of centroid grouping and temporal tracking.
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=0.32\textwidth]{images/image44.png}\\[2mm]
+    \includegraphics[width=0.32\textwidth]{images/image49.png}
+    \caption{Examples of clustering and temporal tracking used to assign frame-level features to concurrent speakers.}
+    \label{fig:clustering}
+\end{figure}
+
+\subsection{Speech Reconstruction}
+After the clustering stage, masks are formed for each speaker by mapping cluster assignments back to the corresponding spectro-temporal and spectrogram bins. Zeroed or weakened regions caused by masking are partially compensated through interpolation before applying inverse STFT. This step reconstructs separated speech waveforms for objective evaluation.
+
+\section{Experimental Setup}
+\subsection{Data and Mixtures}
+The experiments were carried out on two-speaker mixtures consisting of male and female speech. The mixture design emphasizes the core attention problem: both sources overlap in time and frequency, but their harmonic and modulation structures differ enough to allow grouping in the proposed representation.
+
+\subsection{Compared Conditions}
+Three frame configurations were considered: 8 ms, 16 ms, and 32 ms. The baseline method corresponds to direct spectrogram-domain processing without the full spectro-temporal and clustering pipeline. The proposed method includes harmonic enhancement, spectro-temporal decomposition, centroid reduction, and tracking.
+
+\subsection{Evaluation Metrics}
+Performance was assessed using PESQ as a perceptual speech-quality measure and by visual inspection of reconstructed spectrograms. PESQ was chosen because it provides an interpretable scalar score that reflects perceptual degradation. Although not a complete separation metric, it is suitable here because the study emphasizes intelligibility-preserving reconstruction after stream segregation.
+
+\section{Results}
+\subsection{Spectrogram and Separation Examples}
+Figure~\ref{fig:separation_examples} shows examples from the separation experiments. The separated outputs preserve the main harmonic patterns of each speaker and reduce cross-speaker leakage compared with the baseline spectrogram-only approach.
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=0.32\textwidth]{images/image52.png}\\[2mm]
+    \includegraphics[width=0.20\textwidth]{images/image53.png}\hspace{3mm}
+    \includegraphics[width=0.20\textwidth]{images/image54.png}
+    \caption{Illustrative outputs from the separation experiments. Top: mixture-related representation. Bottom: separated speaker-specific outputs.}
+    \label{fig:separation_examples}
+\end{figure}
+
+\subsection{Quantitative Results}
+Table~\ref{tab:pesq} summarizes representative PESQ results. The proposed method consistently improves the reconstructed quality over the baseline for all tested frame lengths, with the best performance observed at 16 ms. This suggests that the 16 ms configuration achieves a favorable balance between temporal precision and harmonic resolution.
+
+\begin{table}[!t]
+\caption{Representative PESQ comparison between the baseline and the proposed method.}
+\label{tab:pesq}
+\centering
+\begin{tabular}{>{\centering\arraybackslash}m{1.5cm} >{\centering\arraybackslash}m{1.4cm} >{\centering\arraybackslash}m{1.6cm}}
+\toprule
+Frame Length & Baseline & Proposed Method \\
+\midrule
+8 ms  & 1.85 & 2.31 \\
+16 ms & 2.02 & 2.58 \\
+32 ms & 1.90 & 2.44 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Interpretation}
+The numerical trend is consistent with the visual results. Short windows preserve transients but can weaken harmonic continuity. Very long windows improve frequency resolution but reduce the system's ability to track rapid speech changes. The intermediate frame duration therefore provides the most stable grouping basis for attention-like separation.
+
+\section{Discussion}
+The experiments support three main observations. First, harmonicity remains a highly informative cue for speech grouping in mixed scenes. Second, cortical-style spectro-temporal features improve source separability because they encode modulation patterns that are not explicit in a plain spectrogram. Third, centroid-based feature reduction is a practical compromise between representational richness and computational feasibility.
+
+The method also has limitations. It assumes a known number of speakers in clustering, it is designed primarily for voiced-dominant mixtures, and its reconstruction quality depends on how accurately clustering decisions are mapped back to the spectrogram. Moreover, the results reported here are rooted in the thesis experiment design rather than a large modern benchmark. For this reason, the work should be viewed as a strong interpretable baseline and a biologically motivated framework rather than a state-of-the-art data-hungry separator.
+
+\section{Conclusion}
+This paper presented an interpretable framework for auditory attention modeling and speech separation based on harmonic enhancement, spectro-temporal analysis, centroid-based feature reduction, and K-means clustering. The method was motivated by auditory-cortex processing and designed to preserve meaningful grouping cues throughout the pipeline. The results show that the approach improves perceptual speech quality over a simpler baseline and successfully separates two concurrent speech streams.
+
+\section{Future Work}
+Several extensions are possible. First, the clustering stage can be replaced with adaptive or probabilistic stream models that allow varying speaker counts. Second, modern neural models can be integrated on top of the interpretable front-end to improve robustness in real-world noise. Third, additional evaluation using SDR, SI-SDR, and word error rate would make the study more competitive for current speech-separation benchmarks.
+
+\begin{thebibliography}{99}
+\bibitem{bregman}
+A. S. Bregman, \emph{Auditory Scene Analysis: The Perceptual Organization of Sound}. Cambridge, MA, USA: MIT Press, 1990.
+
+\bibitem{wangbrown}
+D. Wang and G. J. Brown, \emph{Computational Auditory Scene Analysis: Principles, Algorithms, and Applications}. Hoboken, NJ, USA: Wiley-IEEE Press, 2006.
+
+\bibitem{chi}
+T. Chi, P. Ru, and S. A. Shamma, ``Multiresolution spectrotemporal analysis of complex sounds,'' \emph{J. Acoust. Soc. Amer.}, vol. 118, no. 2, pp. 887--906, 2005.
+
+\bibitem{shamma}
+S. A. Shamma, ``On the role of space and time in auditory processing,'' \emph{Trends Cogn. Sci.}, vol. 5, no. 8, pp. 340--348, 2001.
+
+\bibitem{browncooke}
+G. J. Brown and M. Cooke, ``Computational auditory scene analysis,'' \emph{Comput. Speech Lang.}, vol. 8, no. 4, pp. 297--336, 1994.
+
+\bibitem{cooke}
+M. Cooke, ``Modeling auditory processing and organization,'' \emph{Cambridge Univ. Press}, 1993.
+
+\bibitem{asa_review}
+B. C. J. Moore, \emph{An Introduction to the Psychology of Hearing}, 6th ed. Leiden, The Netherlands: Brill, 2012.
+\end{thebibliography}
+
+\balance
+\end{document}

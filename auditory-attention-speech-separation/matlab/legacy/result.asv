@@ -1,0 +1,38 @@
+function [sp1,sp2,wav1,wav2]=result(cl,wav file,frl)
+wav=wavread('wav file');
+sp=spg(wav,frl);
+SF = 16000;
+paras=[frl,8,-2,log2(SF/16000)];
+rv=[2,4,8,16,32];
+sv=[1/8,1/4,1/2,1,2,4,8];
+cr=aud2cor(sp,paras,rv,sv,'tmpxxx',1);
+(m,n)=size(cl);
+frno=m/10;
+%frno : no. of fram
+index=zeros(frno,10);
+%index= ???? ???? ????? ???? ? ????? ??? ?? ??????
+for i=1:frno
+    for j=(i-1)*10+1:i*10
+        z=mode((j+10),10);
+        index(i,z)=cl(j,5);
+    end
+end
+[s,r,t,f]=size(ca);
+cr1=zeros(s,r,t,f);
+cr2=zeros(s,r,t,f);
+for i=1:frno
+    for j=1:10
+        if index(i,j)==1
+            cr1(:,j,i,:)=cr(:,j,i,:);
+        else
+            cr2(:,j,i,:)=cr(:,j,i,:);
+        end
+    end
+end
+sp1=cor2aud('tmpxxx',cr1);
+sp2=cor2aud('tmpxxx',cr2);
+figure,imshow(sp1),colormap(jet)
+figure,imshow(s),colormap(jet)
+
+        
+        

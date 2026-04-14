@@ -1,0 +1,278 @@
+function [ave,rave,pr]=cortic_ave
+clear all
+disp('Rate 2 is running:')
+load ('Rate2');
+%rate= shomareie rate
+[h,s,r,t,f]=size (ca2);
+ave_kol=zeros(10,t,4);
+for m=1:t
+    % m tedad fraim ha ast
+ave_s=0;
+ave_h=0;
+ave_f=0;
+total_a=0;
+ave_s1=0;
+ave_h1=0;
+ave_f1=0;
+total_a1=0;
+for i=1:s
+    for j=1:f
+        for z=1:h
+            ave_s=abs(ca2(z,i,1,m,j))*i+ave_s;
+            ave_s1=abs(ca2(z,i,2,m,j))*i+ave_s1;
+            ave_f=abs(ca2(z,i,1,m,j))*j+ave_f;
+            ave_f1=abs(ca2(z,i,2,m,j))*j+ave_f1;
+            ave_h=abs(ca2(z,i,1,m,j))*z+ave_h;
+            ave_h1=abs(ca2(z,i,2,m,j))*z+ave_h1;
+            total_a=total_a+abs(ca2(z,i,1,m,j));
+            total_a1=total_a1+abs(ca2(z,i,2,m,j));
+        end
+    end
+end
+%miangine damane ha : jame damane ha zarbdar tedad 
+ta=s*f*h;
+ave_a=total_a/ta;
+ave_a1=total_a1/ta;
+total_a=abs(total_a);
+total_a1=abs(total_a1);
+ave_s=ave_s/total_a;
+ave_s1=ave_s1/total_a1;
+ave_h=ave_h/total_a;
+ave_h1=ave_h1/total_a1;
+ave_f=ave_f/total_a;
+ave_f1=ave_f1/total_a1;
+ave_kol(1,m,1)=ave_s;
+ave_kol(2,m,1)=ave_s1;
+ave_kol(1,m,2)=ave_h;
+ave_kol(2,m,2)=ave_h1;
+ave_kol(1,m,3)=ave_f;
+ave_kol(2,m,3)=ave_f1;
+ave_kol(1,m,4)=ave_a;
+ave_kol(2,m,4)=ave_a1;
+disp(m)
+end
+clear ca2
+disp('Rate 4 is running:')
+load ('Rate4');
+%rate= shomareie rate
+[h,s,r,t,f]=size (ca4);
+for m=1:t
+    % m tedad fraim ha ast
+ave_s=0;
+ave_h=0;
+ave_f=0;
+total_a=0;
+ave_s1=0;
+ave_h1=0;
+ave_f1=0;
+total_a1=0;
+for i=1:s
+    for j=1:f
+        for z=1:h
+            ave_s=abs(ca4(z,i,1,m,j))*i+ave_s;
+            ave_s1=abs(ca4(z,i,2,m,j))*i+ave_s1;
+            ave_f=abs(ca4(z,i,1,m,j))*j+ave_f;
+            ave_f1=abs(ca4(z,i,2,m,j))*j+ave_f1;
+            ave_h=abs(ca4(z,i,1,m,j))*z+ave_h;
+            ave_h1=abs(ca4(z,i,2,m,j))*z+ave_h1;
+            total_a=total_a+abs(ca4(z,i,1,m,j));
+            total_a1=total_a1+abs(ca4(z,i,2,m,j));
+        end
+    end
+end
+%miangine damane ha : jame damane ha zarbdar tedad 
+ta=s*f*h;
+ave_a=total_a/ta;
+ave_a1=total_a1/ta;
+total_a=abs(total_a);
+total_a1=abs(total_a1);
+ave_s=ave_s/total_a;
+ave_s1=ave_s1/total_a1;
+ave_h=ave_h/total_a;
+ave_h1=ave_h1/total_a1;
+ave_f=ave_f/total_a;
+ave_f1=ave_f1/total_a1;
+ave_kol(3,m,1)=ave_s;
+ave_kol(4,m,1)=ave_s1;
+ave_kol(3,m,2)=ave_h;
+ave_kol(4,m,2)=ave_h1;
+ave_kol(3,m,3)=ave_f;
+ave_kol(4,m,3)=ave_f1;
+ave_kol(3,m,4)=ave_a;
+ave_kol(4,m,4)=ave_a1;
+disp(m)
+end
+clear ca4
+disp('Rate 8 is running:')
+load ('Rate8');
+%rate= shomareie rate
+[h,s,r,t,f]=size (ca8);
+for m=1:t
+    % m tedad fraim ha ast
+ave_s=0;
+ave_h=0;
+ave_f=0;
+total_a=0;
+ave_s1=0;
+ave_h1=0;
+ave_f1=0;
+total_a1=0;
+for i=1:s
+    for j=1:f
+        for z=1:h
+            ave_s=abs(ca8(z,i,1,m,j))*i+ave_s;
+            ave_s1=abs(ca8(z,i,2,m,j))*i+ave_s1;
+            ave_f=abs(ca8(z,i,1,m,j))*j+ave_f;
+            ave_f1=abs(ca8(z,i,2,m,j))*j+ave_f1;
+            ave_h=abs(ca8(z,i,1,m,j))*z+ave_h;
+            ave_h1=abs(ca8(z,i,2,m,j))*z+ave_h1;
+            total_a=total_a+abs(ca8(z,i,1,m,j));
+            total_a1=total_a1+abs(ca8(z,i,2,m,j));
+        end
+    end
+end
+%miangine damane ha : jame damane ha zarbdar tedad 
+ta=s*f*h;
+ave_a=total_a/ta;
+ave_a1=total_a1/ta;
+total_a=abs(total_a);
+total_a1=abs(total_a1);
+ave_s=ave_s/total_a;
+ave_s1=ave_s1/total_a1;
+ave_h=ave_h/total_a;
+ave_h1=ave_h1/total_a1;
+ave_f=ave_f/total_a;
+ave_f1=ave_f1/total_a1;
+ave_kol(5,m,1)=ave_s;
+ave_kol(6,m,1)=ave_s1;
+ave_kol(5,m,2)=ave_h;
+ave_kol(6,m,2)=ave_h1;
+ave_kol(5,m,3)=ave_f;
+ave_kol(6,m,3)=ave_f1;
+ave_kol(5,m,4)=ave_a;
+ave_kol(6,m,4)=ave_a1;
+disp(m)
+end
+clear ca8
+disp('Rate 16 is running:')
+load ('Rate16');
+%rate= shomareie rate
+[h,s,r,t,f]=size (ca16);
+for m=1:t
+    % m tedad fraim ha ast
+ave_s=0;
+ave_h=0;
+ave_f=0;
+total_a=0;
+ave_s1=0;
+ave_h1=0;
+ave_f1=0;
+total_a1=0;
+for i=1:s
+    for j=1:f
+        for z=1:h
+            ave_s=abs(ca16(z,i,1,m,j))*i+ave_s;
+            ave_s1=abs(ca16(z,i,2,m,j))*i+ave_s1;
+            ave_f=abs(ca16(z,i,1,m,j))*j+ave_f;
+            ave_f1=abs(ca16(z,i,2,m,j))*j+ave_f1;
+            ave_h=abs(ca16(z,i,1,m,j))*z+ave_h;
+            ave_h1=abs(ca16(z,i,2,m,j))*z+ave_h1;
+            total_a=total_a+abs(ca16(z,i,1,m,j));
+            total_a1=total_a1+abs(ca16(z,i,2,m,j));
+        end
+    end
+end
+%miangine damane ha : jame damane ha zarbdar tedad 
+ta=s*f*h;
+ave_a=total_a/ta;
+ave_a1=total_a1/ta;
+total_a=abs(total_a);
+total_a1=abs(total_a1);
+ave_s=ave_s/total_a;
+ave_s1=ave_s1/total_a1;
+ave_h=ave_h/total_a;
+ave_h1=ave_h1/total_a1;
+ave_f=ave_f/total_a;
+ave_f1=ave_f1/total_a1;
+ave_kol(7,m,1)=ave_s;
+ave_kol(8,m,1)=ave_s1;
+ave_kol(7,m,2)=ave_h;
+ave_kol(8,m,2)=ave_h1;
+ave_kol(7,m,3)=ave_f;
+ave_kol(8,m,3)=ave_f1;
+ave_kol(7,m,4)=ave_a;
+ave_kol(8,m,4)=ave_a1;
+disp(m)
+end
+clear ca16
+disp('Rate 32 is running:')
+load ('Rate32');
+%rate= shomareie rate
+[h,s,r,t,f]=size (ca32);
+for m=1:t
+    % m tedad fraim ha ast
+ave_s=0;
+ave_h=0;
+ave_f=0;
+total_a=0;
+ave_s1=0;
+ave_h1=0;
+ave_f1=0;
+total_a1=0;
+for i=1:s
+    for j=1:f
+        for z=1:h
+            ave_s=abs(ca32(z,i,1,m,j))*i+ave_s;
+            ave_s1=abs(ca32(z,i,2,m,j))*i+ave_s1;
+            ave_f=abs(ca32(z,i,1,m,j))*j+ave_f;
+            ave_f1=abs(ca32(z,i,2,m,j))*j+ave_f1;
+            ave_h=abs(ca32(z,i,1,m,j))*z+ave_h;
+            ave_h1=abs(ca32(z,i,2,m,j))*z+ave_h1;
+            total_a=total_a+abs(ca32(z,i,1,m,j));
+            total_a1=total_a1+abs(ca32(z,i,2,m,j));
+        end
+    end
+end
+%miangine damane ha : jame damane ha zarbdar tedad 
+ta=s*f*h;
+ave_a=total_a/ta;
+ave_a1=total_a1/ta;
+total_a=abs(total_a);
+total_a1=abs(total_a1);
+ave_s=ave_s/total_a;
+ave_s1=ave_s1/total_a1;
+ave_h=ave_h/total_a;
+ave_h1=ave_h1/total_a1;
+ave_f=ave_f/total_a;
+ave_f1=ave_f1/total_a1;
+ave_kol(9,m,1)=ave_s;
+ave_kol(10,m,1)=ave_s1;
+ave_kol(9,m,2)=ave_h;
+ave_kol(10,m,2)=ave_h1;
+ave_kol(9,m,3)=ave_f;
+ave_kol(10,m,3)=ave_f1;
+ave_kol(9,m,4)=ave_a;
+ave_kol(10,m,4)=ave_a1;
+disp(m)
+end
+clear ca32
+clc
+ave=ave_kol;
+save('ave','ave');
+[l,m,n]=size(ave);
+rave=reshape(ave,l*m,[]);%reshape ave
+% khate zir baraie azmaiesh ezafe shode
+ave=rave;
+[rave,pr]=mapstd(rave,0,1); %mapstd rave
+save('rave','rave');
+% khate zir baraie azmaiesh ezafe shode
+save('ave','ave');
+end
+
+
+
+
+
+
+            
+            

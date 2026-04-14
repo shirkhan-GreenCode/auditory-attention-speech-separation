@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: "Auditory Attention Modeling & Speech Separation"
+message: "If you use this repository, please cite the associated work."
+type: software
+authors:
+  - family-names: "Shirkhan"
+    given-names: "Mohammad Reza"
+    email: "r.shirkhan@gmail.com"
+repository-code: "https://github.com/your-username/auditory-attention-speech-separation"
+license: "MIT"
