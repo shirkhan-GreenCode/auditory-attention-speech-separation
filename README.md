@@ -1,73 +1,31 @@
-# 🎧 Auditory Attention Modeling & Speech Separation
+# Auditory Attention Modeling & Speech Separation
 
-A biologically inspired spectro-temporal framework for modeling auditory attention and separating concurrent speech signals (Cocktail Party Problem).
+![Project Cover](assets/cover.png)
 
----
+A biologically inspired spectro-temporal framework for modeling auditory attention and separating concurrent speech signals (the cocktail party problem).
 
-## 📌 Overview
+## Overview
 
-In real-world environments, multiple sound sources overlap in time and frequency. Despite this, the human auditory system can selectively attend to a target speaker. This project presents a computational model inspired by the human auditory cortex to simulate this phenomenon.
+This repository contains the code, paper material, and project assets for an M.Sc. thesis project on auditory attention modeling using spectro-temporal analysis, harmonic structure extraction, cortical representation, and clustering-based speech stream segregation.
 
-The proposed approach integrates:
+## Main Components
 
-* Spectro-temporal analysis
-* Harmonic structure modeling
-* Multi-resolution auditory representation
-* Clustering-based stream segregation
+- **MATLAB implementation** of the proposed pipeline
+- **NSL Tools** dependency bundled under `matlab/external/nsltools`
+- **IEEE-style paper package** under `paper/`
+- **Project assets** for GitHub presentation under `assets/`
 
-to achieve effective multi-speaker speech separation.
+## Repository Structure
 
----
+See `TREE.txt` for the full project tree.
 
-## 🧠 Method Summary
+## Requirements
 
-The pipeline consists of the following stages:
+- MATLAB R2018+ recommended
+- Signal Processing Toolbox
+- Statistics and Machine Learning Toolbox
 
-1. **Spectrogram Estimation (STFT)**
-2. **Harmonic Pattern Extraction**
-3. **Spectro-Temporal Decomposition (NSL Tools)**
-4. **Feature Reduction (Centroid Extraction)**
-5. **Clustering (K-means)**
-6. **Temporal Tracking of Speech Streams**
-7. **Speech Reconstruction**
-
-This approach mimics how auditory cortex neurons encode and group sound features.
-
----
-
-## 🗂 Repository Structure
-
-```
-auditory-attention-speech-separation/
-│
-├── matlab/
-│   ├── src/                  # Clean implementation
-│   ├── legacy/               # Original thesis code
-│   ├── external/nsltools/    # Auditory toolbox
-│   ├── data/
-│   │   ├── audio/            # Input signals
-│   │   └── templates/        # Harmonic templates
-│   ├── results/              # Output files
-│   ├── run_demo.m
-│   └── add_project_paths.m
-│
-├── paper/                    # IEEE paper
-├── README.md
-├── LICENSE
-└── .gitignore
-```
-
----
-
-## ⚙️ Requirements
-
-* MATLAB R2018+ (recommended)
-* Signal Processing Toolbox
-* Statistics and Machine Learning Toolbox
-
----
-
-## ▶️ How to Run
+## Quick Start
 
 ```matlab
 cd('matlab')
@@ -75,7 +33,7 @@ add_project_paths
 run_demo
 ```
 
-Or run manually:
+Or run the main pipeline directly:
 
 ```matlab
 outputs = run_attention_pipeline( ...
@@ -84,85 +42,30 @@ outputs = run_attention_pipeline( ...
     32, 44100, 100, 'results');
 ```
 
----
+## Method Summary
 
-## 📊 Results
+1. Spectrogram estimation
+2. Harmonic pattern extraction
+3. Spectro-temporal decomposition
+4. Feature reduction
+5. K-means clustering
+6. Temporal tracking
+7. Speech reconstruction
 
-The method successfully separates mixed speech signals using biologically inspired features.
+## Paper
 
-### ✔ Key Observations:
+The LaTeX source is available in `paper/main.tex`, and a compiled PDF is provided in `paper/pdf/paper.pdf`.
 
-* Clear separation of harmonic structures
-* Robust performance across different frame sizes
-* Improved perceptual quality (PESQ)
+## Notes
 
-| Frame Length | Baseline | Proposed |
-| ------------ | -------- | -------- |
-| 8 ms         | 1.85     | 2.31     |
-| 16 ms        | 2.02     | 2.58     |
-| 32 ms        | 1.90     | 2.44     |
+- Original thesis code is preserved in `matlab/legacy/`.
+- A cleaner presentation-oriented implementation is placed in `matlab/src/`.
+- This repository is research-oriented and is not optimized for real-time deployment.
 
----
-
-## 📄 Paper
-
-This work is based on an M.Sc. thesis and has been extended into an IEEE-style paper.
-
-📌 The paper is available in the `paper/` directory.
-
----
-
-## 🔬 Key Contributions
-
-* Spectro-temporal modeling of auditory attention
-* Harmonicity-based speech feature enhancement
-* Dimensionality reduction using centroid features
-* Clustering-based speech stream segregation
-* Integration with biologically inspired NSL auditory toolbox
-
----
-
-## ⚠️ Notes
-
-* The NSL Tools toolbox is included for auditory modeling.
-* Some functions rely on legacy implementations and may generate MATLAB warnings.
-* The project is research-oriented and not optimized for real-time use.
-
----
-
-## 📚 Citation
-
-If you use this work, please cite:
-
-```
-Shirkhan, M. R., Rezazi, F., & Ghasemian Yazdi, M. H.
-A Spectro-Temporal Framework for Auditory Attention Modeling.
-```
-
----
-
-## 👨‍💻 Author
+## Author
 
 **Mohammad Reza Shirkhan**
-M.Sc. in Electrical Engineering (Telecommunications)
 
----
+## Supervisors
 
-## 📬 Contact
-
-📧 [r.shirkhan@gmail.com](mailto:r.shirkhan@gmail.com)
-
----
-
-## ⭐ Acknowledgment
-
-This work was conducted under the supervision of:
-
-* Dr. Farbod Rezazi
-* Dr. Mohammad Hassan Ghasemian Yazdi
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License.
+- Dr. Farbod Rezazi
